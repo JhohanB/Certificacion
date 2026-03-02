@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solicitud de Certificación</title>
+<link rel="stylesheet" href="./assets/css/styles.min.css">
+
+<style>
+body { background-color:#F4F6F8; }
+.titulo-verde { color:#2F7D32; }
+.btn-verde { background:#2F7D32; color:white; }
+.btn-verde:hover { background:#1B5E20; color:white; }
+.is-valid { border-color:#198754 !important; }
+.is-invalid { border-color:#dc3545 !important; }
+</style>
+</head>
+
+<body>
+
+<header class="d-flex justify-content-between align-items-center p-3 bg-white shadow-sm">
+    <div class="d-flex align-items-center">
+        <img src="./assets/images/logos/logo_sena.png" height="40">
+        <h5 class="ms-3 mb-0 fw-bold text-dark">Certificación</h5>
+    </div>
+    <a href="index.html" class="btn btn-verde btn-sm">
+        ← Volver al Inicio
+    </a>
+</header>
+
+<div class="container py-5">
+<div class="card shadow-lg border-0 p-5"
+     style="border-radius:12px; border-top:5px solid #2F7D32;">
+
+<h2 class="fw-bold mb-4 text-center titulo-verde">
+Solicitud de Certificación
+</h2>
+
+<form id="form" novalidate>
+
+<!-- DATOS PERSONALES -->
+<h5 class="fw-bold mt-3 mb-3">Datos del Aprendiz</h5>
+
+<div class="row">
+<div class="col-md-6 mb-3">
+<label class="form-label">Tipo de Documento</label>
+<select id="tipoDocumento" class="form-select" required>
+<option value="">Seleccione</option>
+<option>Cédula de Ciudadanía</option>
+<option>Tarjeta de Identidad</option>
+<option>Cédula de Extranjería</option>
+<option>Pasaporte</option>
+<option>PEP</option>
+<option>PPT</option>
+</select>
+<div class="invalid-feedback">Campo obligatorio.</div>
+</div>
+
+<div class="col-md-6 mb-3">
+<label class="form-label">Número de Documento</label>
+<input type="text" id="numeroDocumento" class="form-control" required>
+<div class="invalid-feedback">Solo números.</div>
+</div>
+</div>
+
+<div class="mb-3">
+<label class="form-label">Nombres y Apellidos</label>
+<input type="text" id="nombre" class="form-control" required>
+<div class="invalid-feedback">Solo letras y mínimo 5 caracteres.</div>
+</div>
+
+<div class="row">
+<div class="col-md-6 mb-3">
+<label class="form-label">Correo Electrónico</label>
+<input type="email" id="correo" class="form-control" required>
+<div class="invalid-feedback">Correo inválido.</div>
+</div>
+
+<div class="col-md-6 mb-3">
+<label class="form-label">Confirmar Correo</label>
+<input type="email" id="confirmarCorreo" class="form-control" required>
+<div class="invalid-feedback">Los correos no coinciden.</div>
+</div>
+</div>
+
+<div class="mb-3">
+<label class="form-label">Teléfono</label>
+<input type="text" id="telefono" class="form-control" required>
+<div class="invalid-feedback">Solo números (7-15 dígitos).</div>
+</div>
+
+<!-- INFORMACIÓN ACADÉMICA -->
+<h5 class="fw-bold mt-4 mb-3">Información Académica</h5>
+
+<div class="row">
+<div class="col-md-6 mb-3">
+<label class="form-label">Tipo de Programa</label>
+<select id="tipoPrograma" class="form-select" required>
+<option value="">Seleccione</option>
+<option value="tecnologo">Tecnólogo</option>
+<option value="tecnico">Técnico</option>
+<option value="auxiliar">Auxiliar</option>
+<option value="operario">Operario</option>
+</select>
+</div>
+
+<div class="col-md-6 mb-3">
+<label class="form-label">Número de Ficha</label>
+<input type="text" id="ficha" class="form-control" required>
+<div class="invalid-feedback">Solo números.</div>
+</div>
+</div>
+
+<div class="mb-3">
+<label class="form-label">Nombre del Programa</label>
+<input type="text" id="nombrePrograma" class="form-control" required>
+<div class="invalid-feedback">Mínimo 5 caracteres.</div>
+</div>
+
+<!-- DOCUMENTOS -->
+<div id="documentos" class="d-none">
+<h5 class="fw-bold mt-4 mb-3">Documentos (PDF obligatorio - máx 5MB)</h5>
+
+<input type="file" class="form-control mb-3 documento" accept=".pdf" required>
+<input type="file" class="form-control mb-3 documento" accept=".pdf" required>
+<input type="file" class="form-control mb-3 documento" accept=".pdf" required>
+<input type="file" class="form-control mb-3 documento" accept=".pdf" required>
+
+<div id="campoTYT" class="d-none">
+<input type="file" id="tyt" class="form-control mb-3 documento" accept=".pdf">
+</div>
+</div>
+
+<div class="d-grid mt-4">
+<button type="submit" class="btn btn-verde btn-lg">
+Enviar Solicitud
+</button>
+</div>
+
+</form>
+</div>
+</div>
+
+<script>
+
+const numeroDocumento = document.getElementById("numeroDocumento");
+const telefono = document.getElementById("telefono");
+const nombre = document.getElementById("nombre");
+const correo = document.getElementById("correo");
+const confirmarCorreo = document.getElementById("confirmarCorreo");
+const ficha = document.getElementById("ficha");
+const nombrePrograma = document.getElementById("nombrePrograma");
+const tipoPrograma = document.getElementById("tipoPrograma");
+const documentos = document.getElementById("documentos");
+const campoTYT = document.getElementById("campoTYT");
+const tyt = document.getElementById("tyt");
+
+/* VALIDACIONES EN TIEMPO REAL */
+
+numeroDocumento.addEventListener("input", () => {
+  numeroDocumento.value = numeroDocumento.value.replace(/\D/g,'');
+});
+
+telefono.addEventListener("input", () => {
+  telefono.value = telefono.value.replace(/\D/g,'');
+});
+
+nombre.addEventListener("input", () => {
+  const regex = /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{5,}$/;
+  validarCampo(nombre, regex);
+});
+
+nombrePrograma.addEventListener("input", () => {
+  if(nombrePrograma.value.length >= 5){
+    nombrePrograma.classList.add("is-valid");
+    nombrePrograma.classList.remove("is-invalid");
+  } else {
+    nombrePrograma.classList.add("is-invalid");
+  }
+});
+
+ficha.addEventListener("input", () => {
+  ficha.value = ficha.value.replace(/\D/g,'');
+});
+
+correo.addEventListener("input", validarCorreo);
+confirmarCorreo.addEventListener("input", validarCorreo);
+
+function validarCorreo(){
+  if(correo.value === confirmarCorreo.value && correo.value !== ""){
+    confirmarCorreo.classList.remove("is-invalid");
+    confirmarCorreo.classList.add("is-valid");
+  } else {
+    confirmarCorreo.classList.add("is-invalid");
+  }
+}
+
+function validarCampo(campo, regex){
+  if(regex.test(campo.value)){
+    campo.classList.add("is-valid");
+    campo.classList.remove("is-invalid");
+  } else {
+    campo.classList.add("is-invalid");
+  }
+}
+
+/* MOSTRAR DOCUMENTOS SEGÚN PROGRAMA */
+tipoPrograma.addEventListener("change", function(){
+  if(this.value !== ""){
+    documentos.classList.remove("d-none");
+  }
+  if(this.value === "tecnologo"){
+    campoTYT.classList.remove("d-none");
+    tyt.setAttribute("required","true");
+  } else {
+    campoTYT.classList.add("d-none");
+    tyt.removeAttribute("required");
+  }
+});
+
+/* VALIDACIÓN DE ARCHIVOS */
+document.querySelectorAll(".documento").forEach(input=>{
+  input.addEventListener("change", ()=>{
+    const file = input.files[0];
+    if(file){
+      if(file.type !== "application/pdf"){
+        alert("Solo se permiten archivos PDF.");
+        input.value="";
+      }
+      if(file.size > 5*1024*1024){
+        alert("El archivo supera 5MB.");
+        input.value="";
+      }
+    }
+  });
+});
+
+</script>
+
+</body>
+</html>

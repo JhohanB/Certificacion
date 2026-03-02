@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Consultar Solicitud - CertiAgro</title>
+  <link rel="stylesheet" href="./assets/css/styles.min.css" />
+
+  <style>
+    body {
+      background-color: #F4F6F8;
+    }
+
+    .btn-primary-custom {
+    background-color: #2F7D32 !important;
+    color: #ffffff !important;
+    border: none !important;
+    }
+
+    .btn-primary-custom:hover,
+    .btn-primary-custom:focus,
+    .btn-primary-custom:active {
+    background-color: #256628 !important; /* verde más oscuro */
+    color: #ffffff !important;
+    border: none !important;
+    }
+
+    .btn-outline-custom {
+      border: 2px solid #2F7D32;
+      color: #2F7D32;
+      background: transparent;
+    }
+
+    .btn-outline-custom:hover {
+      background: #2F7D32;
+      color: white;
+    }
+
+    .form-control:focus {
+      border-color: #2F7D32;
+      box-shadow: 0 0 0 0.2rem rgba(47,125,50,0.25);
+    }
+
+    .error {
+      color: #d93025;
+      font-size: 0.85rem;
+      display: none;
+    }
+
+    .resultado {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <header class="d-flex justify-content-between align-items-center p-3 bg-white shadow-sm">
+    <div class="d-flex align-items-center">
+      <img src="./assets/images/logos/logo_sena.png" height="40">
+      <h5 class="ms-3 mb-0 fw-bold text-dark">Certificación</h5>
+    </div>
+  </header>
+
+  <!-- Contenido -->
+  <div class="d-flex justify-content-center align-items-center" style="min-height:85vh;">
+
+    <div class="card shadow-lg border-0 p-5" style="max-width:520px; border-radius:12px;">
+
+      <h2 class="text-center fw-bold mb-4" style="color:#2F7D32;">
+        Consultar Estado
+      </h2>
+
+      <form id="consultaForm" novalidate>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">Número de ficha</label>
+          <input type="text" id="ficha" class="form-control" required>
+          <div class="error" id="errorFicha">
+            Ingrese un número válido (solo números, mínimo 6 dígitos).
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-bold">Tipo de documento</label>
+          <select id="tipoDocumento" class="form-control" required>
+            <option value="">Seleccione una opción</option>
+            <option value="CC">Cédula de ciudadanía</option>
+            <option value="TI">Tarjeta de identidad</option>
+            <option value="CE">Cédula de extranjería</option>
+            <option value="PP">Pasaporte</option>
+            <option value="PEP">Permiso Especial de Permanencia</option>
+            <option value="PPT">Permiso por Protección Temporal</option>
+          </select>
+          <div class="error" id="errorTipoDoc">
+            Seleccione el tipo de documento.
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label fw-bold">Número de documento</label>
+          <input type="text" id="numeroDocumento" class="form-control" required>
+          <div class="error" id="errorNumeroDoc">
+            Ingrese un número válido (solo números).
+          </div>
+        </div>
+
+        <div class="d-grid gap-3">
+          <button type="submit" class="btn btn-primary-custom btn-lg">
+            Consultar Estado
+          </button>
+
+          <a href="index.html" class="btn btn-outline-custom btn-lg">
+            Regresar al menú inicial
+          </a>
+        </div>
+
+      </form>
+
+      <div class="resultado mt-4 alert alert-light border" id="resultadoConsulta">
+        <strong>Estado:</strong>
+        <span id="mensajeResultado"></span>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="text-center p-3 bg-white border-top text-muted">
+    © 2026 Certificación - Sistema Institucional
+  </footer>
+
+<script>
+const ficha = document.getElementById("ficha");
+const tipoDocumento = document.getElementById("tipoDocumento");
+const numeroDocumento = document.getElementById("numeroDocumento");
+
+const errorFicha = document.getElementById("errorFicha");
+const errorTipoDoc = document.getElementById("errorTipoDoc");
+const errorNumeroDoc = document.getElementById("errorNumeroDoc");
+
+const form = document.getElementById("consultaForm");
+const resultado = document.getElementById("resultadoConsulta");
+const mensajeResultado = document.getElementById("mensajeResultado");
+
+/* Validaciones en tiempo real */
+
+ficha.addEventListener("input", () => {
+  ficha.value = ficha.value.replace(/\D/g, '');
+  errorFicha.style.display = ficha.value.length < 6 ? "block" : "none";
+});
+
+tipoDocumento.addEventListener("change", () => {
+  errorTipoDoc.style.display = tipoDocumento.value === "" ? "block" : "none";
+});
+
+numeroDocumento.addEventListener("input", () => {
+  numeroDocumento.value = numeroDocumento.value.replace(/\D/g, '');
+  errorNumeroDoc.style.display = numeroDocumento.value.length < 5 ? "block" : "none";
+});
+
+/* Validación al enviar */
+
+form.addEventListener("submit", function(e){
+  e.preventDefault();
+
+  let valido = true;
+
+  if(ficha.value.length < 6){
+    errorFicha.style.display = "block";
+    valido = false;
+  }
+
+  if(tipoDocumento.value === ""){
+    errorTipoDoc.style.display = "block";
+    valido = false;
+  }
+
+  if(numeroDocumento.value.length < 5){
+    errorNumeroDoc.style.display = "block";
+    valido = false;
+  }
+
+  if(valido){
+    resultado.style.display = "block";
+    mensajeResultado.innerText = "Su solicitud se encuentra en estado: EN REVISIÓN.";
+  }
+});
+</script>
+
+</body>
+</html>
